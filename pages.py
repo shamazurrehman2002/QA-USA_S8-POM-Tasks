@@ -14,6 +14,9 @@ class UrbanRoutesPage:
     SUPPORTIVE_TARIFF = (By.XPATH, "//div[contains(text(),'Supportive')]")
     ACTIVE_TARIFF = (By.XPATH, "//div[contains(@class,'tcard active')]")
 
+    # ✅ NEW locator for phone button
+    PHONE_BUTTON = (By.CLASS_NAME, "np-button")
+
     PHONE_FIELD = (By.ID, "phone")
     NEXT_BUTTON = (By.XPATH, "//button[text()='Next']")
     CODE_FIELD = (By.ID, "code")
@@ -23,7 +26,8 @@ class UrbanRoutesPage:
     ADD_CARD_BUTTON = (By.XPATH, "//div[text()='Add card']")
     CARD_NUMBER_FIELD = (By.ID, "number")
 
-    CARD_CODE_FIELD = (By.XPATH, "//input[@placeholder='CVV']")  # ✅ FIXED
+    # ✅ FIXED CVV locator
+    CARD_CODE_FIELD = (By.CSS_SELECTOR, "#code.card-input")
 
     LINK_BUTTON = (By.XPATH, "//button[text()='Link']")
 
@@ -35,7 +39,7 @@ class UrbanRoutesPage:
     ICE_CREAM_PLUS = (By.XPATH, "//div[contains(@class,'counter-plus')]")
     ICE_CREAM_COUNT = (By.CLASS_NAME, "counter-value")
 
-    ORDER_BUTTON = (By.CSS_SELECTOR, ".smart-button")  # ✅ FIXED
+    ORDER_BUTTON = (By.CSS_SELECTOR, ".smart-button")
 
     SEARCH_MODAL = (By.CLASS_NAME, "order-header")
 
@@ -69,9 +73,9 @@ class UrbanRoutesPage:
     def get_active_tariff(self):
         return self.driver.find_element(*self.ACTIVE_TARIFF).text
 
-    # Phone FIXED
+    # ✅ FIXED phone flow
     def enter_phone(self, phone):
-        self.driver.find_element(*self.PHONE_FIELD).click()
+        self.driver.find_element(*self.PHONE_BUTTON).click()
         self.driver.find_element(*self.PHONE_FIELD).send_keys(phone)
         self.driver.find_element(*self.NEXT_BUTTON).click()
 
@@ -81,8 +85,9 @@ class UrbanRoutesPage:
         ).send_keys(code)
         self.driver.find_element(*self.CONFIRM_BUTTON).click()
 
+    # ✅ FIXED phone value source
     def get_phone_value(self):
-        return self.driver.find_element(*self.PHONE_FIELD).get_attribute("value")
+        return self.driver.find_element(*self.PHONE_BUTTON).text
 
     # Credit card
     def add_credit_card(self, number, code):
