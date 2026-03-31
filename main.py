@@ -10,6 +10,7 @@ class TestUrbanRoutes:
     def setup_class(cls):
         from selenium.webdriver import DesiredCapabilities
 
+        # ✅ THESE 3 LINES MUST BE BEFORE IF
         capabilities = DesiredCapabilities.CHROME
         capabilities["goog:loggingPrefs"] = {'performance': 'ALL'}
         cls.driver = webdriver.Chrome()
@@ -45,6 +46,24 @@ class TestUrbanRoutes:
 
         assert data.PHONE_NUMBER in self.page.get_phone_value()
 
+    def test_add_credit_card(self):
+        self.page.set_addresses(data.FROM_ADDRESS, data.TO_ADDRESS)
+        self.page.click_call_taxi()
+        self.page.select_supportive_tariff()
+
+        self.page.add_credit_card(data.CARD_NUMBER, data.CARD_CODE)
+
+        assert self.page.get_payment_method() == "Card"
+
+    def test_comment_driver(self):
+        self.page.set_addresses(data.FROM_ADDRESS, data.TO_ADDRESS)
+        self.page.click_call_taxi()
+        self.page.select_supportive_tariff()
+
+        self.page.add_comment(data.MESSAGE_FOR_DRIVER)
+
+        assert self.page.get_comment() == data.MESSAGE_FOR_DRIVER
+
     def test_order_blanket(self):
         self.page.set_addresses(data.FROM_ADDRESS, data.TO_ADDRESS)
         self.page.click_call_taxi()
@@ -53,6 +72,15 @@ class TestUrbanRoutes:
         self.page.order_blanket_handkerchiefs()
 
         assert self.page.is_blanket_selected()
+
+    def test_order_2_ice_creams(self):
+        self.page.set_addresses(data.FROM_ADDRESS, data.TO_ADDRESS)
+        self.page.click_call_taxi()
+        self.page.select_supportive_tariff()
+
+        self.page.order_ice_creams(2)
+
+        assert self.page.get_ice_cream_count() == "2"
 
     def test_order_taxi(self):
         self.page.set_addresses(data.FROM_ADDRESS, data.TO_ADDRESS)
